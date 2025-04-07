@@ -1,0 +1,38 @@
+[
+    {
+        "Prompt": "What is the capital of France?",
+        "Completion": "Paris"
+    },
+    {
+        "Prompt": "Translate 'hello' to Spanish.",
+        "Completion": "Hola"
+    },
+    {
+        "Prompt": "Summarize the following text: 'Artificial intelligence is a branch of computer science...'",
+        "Completion": "AI is a branch of computer science focused on creating intelligent systems."
+    },
+    {
+        "Prompt": "Unlock qa applicatoin password.",
+        "Completion": "Do you want to unlock the umms applicatoin user coiadmin?"
+    },
+    {
+        "Prompt": "What is the password for the QA application?",
+        "Completion": "Do you want to unlock the umms applicatoin user coiadmin?"
+    },
+    {
+        "Prompt": "How can I unlock the QA application?",
+        "Completion": "Do you want to unlock the umms applicatoin user coiadmin?"
+    },
+    {
+        "Prompt": "Please provide the steps to unlock the QA application.",
+        "Completion": "Do you want to unlock the umms applicatoin user coiadmin?"
+    },
+    {
+        "Prompt": "Can you help me unlock the QA application?",
+        "Completion": "Do you want to unlock the umms applicatoin user coiadmin?"
+    },
+    {
+        "Prompt": "What should I do to unlock the QA application?",
+        "Completion": "Do you want to unlock the umms applicatoin user coiadmin?"
+    }
+]
