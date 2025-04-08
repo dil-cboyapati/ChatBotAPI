@@ -47,7 +47,7 @@ namespace ChatBotAPI.Helpers
 			else
 			{
 				passwordRequestValidation.IsValidRequest = false;
-				passwordRequestValidation.Message = $"Provided applcation(${passwordRequest.ApplicationName}) is not in the list. Please provide request with valid application";
+				passwordRequestValidation.Message = $"Not able to find application name. Please provide request with application name";
 			}
 
 			return passwordRequestValidation;

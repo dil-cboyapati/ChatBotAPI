@@ -1,4 +1,3 @@
-using ChatBotAPI;
 using ChatBotAPI.Helpers;
 using ChatBotAPI.Models;
 using ChatBotAPI.Repositories;
@@ -19,18 +18,26 @@ builder.Services.AddScoped<IRiskManagerService, RiskManagerService>();
 builder.Services.AddScoped<IRiskManagerRepo, RiskManagerRepo>();
 builder.Services.AddSingleton<ChatContext>();
 builder.Services.AddSingleton<Helper>();
-
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowOrigin",
+		builder =>
+		{
+			builder.WithOrigins("http://localhost:3000")
+				   .AllowAnyHeader()
+				   .AllowAnyMethod();
+		});
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
 
-app.UseCors();
-app.UseHttpsRedirection();
+app.UseCors(x => { x.AllowAnyHeader();x.AllowAnyMethod();x.AllowAnyOrigin(); });
 
 app.UseAuthorization();
 

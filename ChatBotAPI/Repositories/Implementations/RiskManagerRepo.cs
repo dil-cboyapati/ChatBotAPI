@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 
 using ChatBotAPI.Helpers;
 using ChatBotAPI.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ChatBotAPI.Repositories
 {
@@ -37,7 +38,7 @@ namespace ChatBotAPI.Repositories
 			using (var connection = new SqlConnection(connStr))
 			{
 				connection.Open();
-				var query = DBString.GetUnlockUserQuery(userName);
+				var query = DBString.GetResetUserPasswordQuery(userName);
 				dbResponse = await connection.QueryFirstAsync<DBResponse>(query);
 			}
 			return dbResponse.IsSuccess ? dbResponse.SuccessMessage : dbResponse.ErrorMessage;

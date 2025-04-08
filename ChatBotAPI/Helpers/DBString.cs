@@ -11,7 +11,6 @@ namespace ChatBotAPI.Helpers
 			@"BEGIN TRY 
 				DECLARE @UserId INT = NULL;
 				SELECT @UserId = ID FROM USERS WHERE USER_NAME_TX = '@UserName'
-				SELECT @UserId
 				IF @UserId IS NULL
 				BEGIN
 				 SELECT 0 AS IsSuccess
@@ -44,7 +43,6 @@ namespace ChatBotAPI.Helpers
 			@"BEGIN TRY 
 				DECLARE @UserId INT = NULL;
 				SELECT @UserId = ID FROM USERS WHERE USER_NAME_TX = '@UserName'
-				SELECT @UserId
 				IF @UserId IS NULL
 				BEGIN
 				 SELECT 0 AS IsSuccess
