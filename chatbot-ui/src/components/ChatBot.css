@@ -1,0 +1,234 @@
+.chat-container {
+  width: 700px;
+  margin: 30px auto;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  background-color: #f0f2f5; /* light background for the full container */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.chat-box {
+  flex: 1;
+  padding: 10px;
+  background-color: white; /* soft chat background */
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide scrollbar in Chrome, Edge, Safari */
+.chat-box::-webkit-scrollbar {
+  display: none;
+}
+
+.message {
+  padding: 8px 12px;
+  margin: 6px 0;
+  border-radius: 16px;
+  max-width: 70%;
+  word-wrap: break-word;
+  display: inline-block;
+  clear: both;
+  font-family: sans-serif;
+}
+
+.message.user {
+  background-color: #5D7599;
+  align-self: flex-end;
+  text-align: right;
+  color: whitesmoke;
+}
+
+.message.bot {
+  background-color: #5d759921;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.typing .spinner {
+  display: flex;
+  gap: 4px;
+  padding: 6px 0;
+}
+
+.spinner span {
+  width: 8px;
+  height: 8px;
+  background-color: #555;
+  border-radius: 50%;
+  animation: bounce 1.2s infinite ease-in-out both;
+}
+
+.spinner span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.spinner span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.spinner span:nth-child(3) {
+  animation-delay: 0;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+
+.input-area input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.input-area button {
+  padding: 12px 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.input-area {
+  padding: 5px;
+  background-color: white;
+  /* border-top: 1px solid #ccc; */
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
+  padding: 8px;
+}
+
+.input-wrapper button {
+  /* background: #007bff; */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: background 0.2s ease;
+}
+
+.input-wrapper button:hover {
+  background: #5D7599;
+}
+
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  margin: 6px 0;
+}
+
+.message-row.user {
+  justify-content: flex-end;
+}
+
+.message-row.bot {
+  justify-content: flex-start;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  background-color: #dee2e6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+.message-row.user .avatar {
+  order: 2; /* move user icon to the right side */
+}
+
+.message-row.user .message {
+  order: 1;
+}
+
+.message-row.bot .avatar {
+  order: 1;
+}
+
+.message-row.bot .message {
+  order: 2;
+}
+
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  background-color: #5D7599;
+  color: white;
+  padding: 12px 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-icon {
+  font-size: 24px;
+  background-color: white;
+  color: #007bff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.header-title .name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header-title .status {
+  font-size: 12px;
+  color: #d1ecf1;
+}
+
+.welcome-message{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5D7599;
+  text-align: center;
+}
