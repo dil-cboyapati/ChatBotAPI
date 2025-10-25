@@ -14,10 +14,11 @@ namespace ChatBotAPI.Repositories
 		{
 			_helper = helper;
 		}
-		public async Task<string> UnlockUserAccount(string userName, string application)
+		public async Task<string> UnlockUserAccount(string userName, string application, string? environmentName = null)
 		{
 			var dbResponse = new DBResponse();
-			var connStr = _helper.GetApplicationDBConnectionString(application);
+			var connStr = _helper.GetApplicationDBConnectionString(application, environmentName);
+			Console.WriteLine(connStr);
 			var testQuery = DBString.GetUnlockUserQuery(userName);
 			//run ms sql db commannd using dapper
 			using (var connection = new SqlConnection(connStr))
@@ -29,10 +30,11 @@ namespace ChatBotAPI.Repositories
 			return dbResponse.IsSuccess ? dbResponse.SuccessMessage : dbResponse.ErrorMessage;
 		}
 
-		public async Task<string> ResetUserAccountPasword(string userName, string application)
+		public async Task<string> ResetUserAccountPasword(string userName, string application, string? environmentName = null)
 		{
 			var dbResponse = new DBResponse();
-			var connStr = _helper.GetApplicationDBConnectionString(application);
+			var connStr = _helper.GetApplicationDBConnectionString(application, environmentName);
+			Console.WriteLine(connStr);
 			var testQuery = DBString.GetResetUserPasswordQuery(userName);
 			//run ms sql db commannd using dapper
 			using (var connection = new SqlConnection(connStr))

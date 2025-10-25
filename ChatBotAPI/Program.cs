@@ -1,3 +1,4 @@
+using Amazon.BedrockRuntime;
 using Amazon.SQS;
 using ChatBotAPI;
 using ChatBotAPI.Helpers;
@@ -27,9 +28,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<OpenAISettings>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.Configure<BedrockSettings>(builder.Configuration.GetSection("BedrockSettings"));
 builder.Services.Configure<List<ClientDataConfig>>(builder.Configuration.GetSection("ClientsApplicationData"));
 builder.Services.Configure<SqsSettings>(builder.Configuration.GetSection("SqsSettings"));
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IBedrockService, BedrockService>();
 builder.Services.AddScoped<IRiskManagerService, RiskManagerService>();
 builder.Services.AddScoped<IRiskManagerRepo, RiskManagerRepo>();
 builder.Services.AddSingleton<ChatContext>();
@@ -62,6 +65,26 @@ builder.Services.AddSingleton<IAmazonSQS>(sp =>
 	{
 		// Use default credentials (IAM role, environment variables, or AWS profile)
 		return new AmazonSQSClient(Amazon.RegionEndpoint.GetBySystemName(sqsSettings?.AwsRegion ?? "us-west-2"));
+	}
+});
+
+// Configure AWS Bedrock Client
+builder.Services.AddSingleton<IAmazonBedrockRuntime>(sp =>
+{
+	var bedrockSettings = builder.Configuration.GetSection("BedrockSettings").Get<BedrockSettings>();
+	
+	if (!string.IsNullOrEmpty(bedrockSettings?.AwsAccessKeyId) && !string.IsNullOrEmpty(bedrockSettings?.AwsSecretAccessKey))
+	{
+		// Use explicit credentials
+		return new AmazonBedrockRuntimeClient(
+			bedrockSettings.AwsAccessKeyId,
+			bedrockSettings.AwsSecretAccessKey,
+			Amazon.RegionEndpoint.GetBySystemName(bedrockSettings.AwsRegion));
+	}
+	else
+	{
+		// Use default credentials (IAM role, environment variables, or AWS profile)
+		return new AmazonBedrockRuntimeClient(Amazon.RegionEndpoint.GetBySystemName(bedrockSettings?.AwsRegion ?? "us-west-2"));
 	}
 });
 

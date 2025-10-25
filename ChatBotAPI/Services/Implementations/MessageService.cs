@@ -14,14 +14,16 @@ namespace ChatBotAPI.Services
 		private ChatContext _chatContext;
 		private readonly Helper _helper;
 		private readonly IRiskManagerService _riskManagerService;
+		private readonly IBedrockService _bedrockService;
 		
 
-		public MessageService(IOptions<OpenAISettings> openAISettings, ChatContext chatContext, Helper helper, IRiskManagerService riskManagerService)
+		public MessageService(IOptions<OpenAISettings> openAISettings, ChatContext chatContext, Helper helper, IRiskManagerService riskManagerService, IBedrockService bedrockService)
 		{
 			_openAISettings = openAISettings.Value;
 			_chatContext = chatContext;
 			_helper = helper;
 			_riskManagerService = riskManagerService;
+			_bedrockService = bedrockService;
 		}
 
 		public async Task<Response> CompleteMessage(UserMessage message)
@@ -38,8 +40,8 @@ namespace ChatBotAPI.Services
 				response.ResponseMessage = "Please provide a message.";
 				return response;
 			}
-			var chatResponse = await ProcessMessage(message);
-			var messageRequestData = chatResponse.Value.Content[0].Text;
+			var chatResponse = await _bedrockService.ProcessMessage(message);
+			var messageRequestData = chatResponse;
 			response.ResponseMessage = messageRequestData;
 
 			var chatRequest = JsonSerializer.Deserialize<ChatRequest>(messageRequestData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

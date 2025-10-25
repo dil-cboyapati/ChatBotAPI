@@ -21,16 +21,16 @@ namespace ChatBotAPI.Services
 			_riskManagerRepo = riskManagerRepo;
 		}
 
-		public async Task<string> UnlockPassword(ChatRequest request)
-		{
-			var unlockResponse = await _riskManagerRepo.UnlockUserAccount(request.UserName, request.ApplicationName);
-			return unlockResponse;
-		}
+	public async Task<string> UnlockPassword(ChatRequest request)
+	{
+		var unlockResponse = await _riskManagerRepo.UnlockUserAccount(request.UserName, request.ApplicationName, request.EnvironmentName);
+		return unlockResponse;
+	}
 
-		public async Task<string> ResetPassword(ChatRequest request)
-		{
-			var resetResponse = await _riskManagerRepo.ResetUserAccountPasword(request.UserName, request.ApplicationName);
-			return resetResponse;
-		}
+	public async Task<string> ResetPassword(ChatRequest request)
+	{
+		var resetResponse = await _riskManagerRepo.ResetUserAccountPasword(request.UserName, request.ApplicationName, request.EnvironmentName);
+		return resetResponse;
+	}
 	}
 }

@@ -38,7 +38,7 @@ namespace ChatBotAPI.Helpers
 				{
 					passwordRequestValidation.IsValidRequest = false;
 				}
-				else if(passwordRequestValidation.IsValidRequest)
+				else if (passwordRequestValidation.IsValidRequest)
 				{
 					passwordRequestValidation.IsResetPasswordRequest = CheckValueExistsInList(passwordRequest.Action, applicationData.ResetPasswordKeywords);
 					passwordRequestValidation.IsUnlockAccountRequest = CheckValueExistsInList(passwordRequest.Action, applicationData.UnlockAccountKeywords);
@@ -53,7 +53,7 @@ namespace ChatBotAPI.Helpers
 			return passwordRequestValidation;
 		}
 
-		public string GetApplicationDBConnectionString(string applicationName)
+		public string? GetApplicationDBConnectionString(string applicationName, string? environmentName = null)
 		{
 			//check applicatoinName in clientDataConfig list  by ignoring case
 			if (string.IsNullOrEmpty(applicationName))
@@ -61,15 +61,35 @@ namespace ChatBotAPI.Helpers
 				return null;
 			}
 
-			var clientData = _clientDataConfig.FirstOrDefault(x => x.ApplicationName.Contains(applicationName.ToUpper()));
-			if (clientData == null)
+
+			// Get connection string based on environment
+			var connectionString = GetConnectionStringForEnvironment(applicationName, environmentName);
+			if (!string.IsNullOrEmpty(connectionString))
+			{
+				// Replace INITIAL CATALOG with application name (case-insensitive)
+				connectionString = System.Text.RegularExpressions.Regex.Replace(
+					connectionString,
+					@"INITIAL\s+CATALOG\s*=\s*[^;]+",
+					$"INITIAL CATALOG={applicationName}",
+					System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+			}
+
+			return connectionString;
+		}
+
+		private string? GetConnectionStringForEnvironment(string? applicationName, string? environmentName)
+		{
+			// If no application name or environment specified, return null
+			if (string.IsNullOrEmpty(applicationName) || string.IsNullOrEmpty(environmentName))
 			{
 				return null;
 			}
-			return clientData.ConnectionString;
+
+			// Step 1: Validate application name exists in ClientDataConfig
+			return _clientDataConfig.FirstOrDefault(x => CheckValueExistsInList(environmentName, x.Environments) && CheckValueExistsInList(applicationName, x.ApplicationName))?.ConnectionString;
 		}
 
-		public ClientDataConfig GetAppicationDataFromClientDataConfig(string applicationName)
+		public ClientDataConfig? GetAppicationDataFromClientDataConfig(string applicationName)
 		{
 			if (string.IsNullOrEmpty(applicationName))
 			{
@@ -85,3 +105,4 @@ namespace ChatBotAPI.Helpers
 		}
 	}
 }
+

@@ -13,16 +13,16 @@ namespace ChatBotAPI.Services.BackgroundServices
 		private readonly IServiceScopeFactory _serviceScopeFactory;
 
 		public SqsPollingService(
-			ILogger<SqsPollingService> logger,
-			IOptions<SqsSettings> sqsSettings,
-			IAmazonSQS sqsClient,
-			IServiceScopeFactory serviceScopeFactory)
-		{
-			_logger = logger;
-			_sqsSettings = sqsSettings.Value;
-			_sqsClient = sqsClient;
-			_serviceScopeFactory = serviceScopeFactory;
-		}
+            ILogger<SqsPollingService> logger,
+            IOptions<SqsSettings> sqsSettings,
+            IAmazonSQS sqsClient,
+            IServiceScopeFactory serviceScopeFactory)
+        {
+            _logger = logger;
+            _sqsSettings = sqsSettings.Value;
+            _sqsClient = sqsClient;
+            _serviceScopeFactory = serviceScopeFactory;
+        }
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
@@ -48,14 +48,14 @@ namespace ChatBotAPI.Services.BackgroundServices
 
 		private async Task PollMessagesAsync(CancellationToken cancellationToken)
 		{
-			var request = new ReceiveMessageRequest
-			{
-				QueueUrl = _sqsSettings.QueueUrl,
-				MaxNumberOfMessages = _sqsSettings.MaxNumberOfMessages,
-				WaitTimeSeconds = _sqsSettings.WaitTimeSeconds,
-				MessageAttributeNames = new List<string> { "All" },
-				AttributeNames = new List<string> { "All" }
-			};
+		var request = new ReceiveMessageRequest
+		{
+			QueueUrl = _sqsSettings.QueueUrl,
+			MaxNumberOfMessages = _sqsSettings.MaxNumberOfMessages,
+			WaitTimeSeconds = _sqsSettings.WaitTimeSeconds,
+			MessageAttributeNames = new List<string> { "All" },
+			MessageSystemAttributeNames = new List<string> { "All" }
+		};
 
 			var response = await _sqsClient.ReceiveMessageAsync(request, cancellationToken);
 
@@ -77,17 +77,19 @@ namespace ChatBotAPI.Services.BackgroundServices
 				_logger.LogInformation($"Processing message: {message.MessageId}");
 				_logger.LogInformation($"Message Body: {message.Body}");
 
-				// Create a new scope for scoped services
-				using (var scope = _serviceScopeFactory.CreateScope())
-				{
-					// TODO: Add your message processing logic here
-					// Example: Get your services and process the message
-					// var messageService = scope.ServiceProvider.GetRequiredService<IMessageService>();
-					// await messageService.ProcessMessageAsync(message.Body);
-
-					// If processing is successful, delete the message from the queue
-					await DeleteMessageAsync(message.ReceiptHandle, cancellationToken);
-				}
+			// Create a new scope for scoped services
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				// Get the message service from the scope (required for scoped services in singleton background service)
+				var messageService = scope.ServiceProvider.GetRequiredService<IMessageService>();
+				
+				// Process the message
+				var response = await messageService.CompleteMessage(new UserMessage { Message = message.Body });
+				_logger.LogInformation($"Response: {response.ResponseMessage}");
+				
+				// If processing is successful, delete the message from the queue
+				await DeleteMessageAsync(message.ReceiptHandle, cancellationToken);
+			}
 
 				_logger.LogInformation($"Successfully processed message: {message.MessageId}");
 			}
