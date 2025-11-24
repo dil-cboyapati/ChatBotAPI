@@ -45,5 +45,35 @@ namespace ChatBotAPI.Repositories
 			}
 			return dbResponse.IsSuccess ? dbResponse.SuccessMessage : dbResponse.ErrorMessage;
 		}
+
+		public async Task<string> RunProcessDefinition(string processName, string application, string? environmentName = null)
+		{
+			var dbResponse = new DBResponse();
+			var connStr = _helper.GetApplicationDBConnectionString(application, environmentName);
+			Console.WriteLine(connStr);
+			var query = DBString.GetRunProcessDefinitionQuery(processName);
+			//run ms sql db commannd using dapper
+			using (var connection = new SqlConnection(connStr))
+			{
+				connection.Open();
+				dbResponse = await connection.QueryFirstAsync<DBResponse>(query);
+			}
+			return dbResponse.IsSuccess ? dbResponse.SuccessMessage : dbResponse.ErrorMessage;
+		}
+
+		public async Task<string> CloseCampaignForms(int campaignId, string application, string? environmentName = null)
+		{
+			var dbResponse = new DBResponse();
+			var connStr = _helper.GetApplicationDBConnectionString(application, environmentName);
+			Console.WriteLine(connStr);
+			var query = DBString.GetCloseCampaignFormsQuery(campaignId);
+			//run ms sql db commannd using dapper
+			using (var connection = new SqlConnection(connStr))
+			{
+				connection.Open();
+				dbResponse = await connection.QueryFirstAsync<DBResponse>(query);
+			}
+			return dbResponse.IsSuccess ? dbResponse.SuccessMessage : dbResponse.ErrorMessage;
+		}
 	}
 }

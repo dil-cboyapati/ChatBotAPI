@@ -69,10 +69,10 @@ namespace ChatBotAPI.Services
 			}
             if (passwordRequestValidation.IsUnlockAccountRequest)
             {
-				response.ResponseMessage = await _riskManagerService.UnlockPassword(chatRequest);
+				response.ResponseMessage = await _riskManagerService.UnlockPassword(chatRequest.UserName, chatRequest.ApplicationName, chatRequest.EnvironmentName);
 			} else if (passwordRequestValidation.IsResetPasswordRequest)
 			{
-				response.ResponseMessage = await _riskManagerService.ResetPassword(chatRequest);
+				response.ResponseMessage = await _riskManagerService.ResetPassword(chatRequest.UserName, chatRequest.ApplicationName, chatRequest.EnvironmentName);
 			}
 			else
 			{
