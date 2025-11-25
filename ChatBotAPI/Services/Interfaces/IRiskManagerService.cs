@@ -1,10 +1,10 @@
-﻿using ChatBotAPI.Models;
-
-namespace ChatBotAPI.Services
+﻿namespace ChatBotAPI.Services
 {
 	public interface IRiskManagerService
 	{
-		Task<string> UnlockPassword(ChatRequest request);
-		Task<string> ResetPassword(ChatRequest request);
+		Task<string> UnlockPassword(string userName, string applicationName, string? environmentName = null);
+		Task<string> ResetPassword(string userName, string applicationName, string? environmentName = null);
+		Task<string> RunProcessDefinition(string processName, string applicationName, string? environmentName = null);
+		Task<string> CloseCampaignForms(int campaignId, string applicationName, string? environmentName = null);
 	}
 }
